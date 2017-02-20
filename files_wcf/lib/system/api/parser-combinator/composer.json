@@ -1,0 +1,9 @@
+{
+    "config": {
+        "vendor-dir": ".",
+        "prepend-autoloader": false
+    },
+    "require": {
+        "vektah/parser-combinator": "0.2.4"
+    }
+}
