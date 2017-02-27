@@ -6,5 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = $vendorDir;
 
 return array(
-    'vektah\\parser_combinator' => array($vendorDir . '/vektah/parser-combinator/src/main'),
 );

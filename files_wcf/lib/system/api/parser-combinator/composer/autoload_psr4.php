@@ -6,4 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = $vendorDir;
 
 return array(
+    'Widmogrod\\' => array($vendorDir . '/widmogrod/php-functional/src'),
+    'Bastelstube\\ParserCombinator\\' => array($vendorDir . '/timwolla/parser-combinator/src'),
 );

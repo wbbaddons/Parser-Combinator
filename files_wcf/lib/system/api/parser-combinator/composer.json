@@ -4,6 +4,6 @@
         "prepend-autoloader": false
     },
     "require": {
-        "vektah/parser-combinator": "0.2.4"
+        "timwolla/parser-combinator": "0.0.1"
     }
 }
