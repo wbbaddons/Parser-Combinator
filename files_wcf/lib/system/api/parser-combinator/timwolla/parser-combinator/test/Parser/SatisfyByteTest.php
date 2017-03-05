@@ -25,10 +25,10 @@ SOFTWARE.
 
 namespace Bastelstube\ParserCombinator\Test\Parser;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Bastelstube\ParserCombinator;
+use function Bastelstube\ParserCombinator\{char, choice, many, satisfyChar, stringP, tryP};
 
-class SatisfyByteTest extends \PHPUnit_Framework_TestCase
+class SatisfyByteTest extends \PHPUnit\Framework\TestCase
 {
     public function testParsesByte()
     {
@@ -38,16 +38,16 @@ class SatisfyByteTest extends \PHPUnit_Framework_TestCase
 
         $input = new ParserCombinator\Input('x');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('x', $result->getResult());
         });
 
         $input = new ParserCombinator\Input('y');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('y', $result->getResult());
         });
@@ -60,7 +60,7 @@ class SatisfyByteTest extends \PHPUnit_Framework_TestCase
         });
         $input = new ParserCombinator\Input('z');
 
-        $parser($input)->either(function ($message) {
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
             $this->assertTrue(true);
         }, function ($result) {
             $this->fail($result->getResult());

@@ -26,10 +26,14 @@ SOFTWARE.
 namespace Bastelstube\ParserCombinator\Combinator;
 
 use Bastelstube\ParserCombinator\Input;
+use Bastelstube\ParserCombinator\ParseResult;
 use Bastelstube\ParserCombinator\Parser;
 use Bastelstube\ParserCombinator\Result;
 use Widmogrod\Monad\Either;
 
+/**
+ * Matches the result of the first Parser that successfully parses.
+ */
 class Choice extends Parser
 {
     protected $parsers;
@@ -39,6 +43,9 @@ class Choice extends Parser
         $this->parsers = $parsers;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
         $fails = [];
@@ -48,9 +55,13 @@ class Choice extends Parser
             if ($result instanceof Either\Right) {
                 return $result;
             }
-            $fails[] = $result->extract();
+            if ($result->extract()->hasConsumed()) {
+                return $result;
+            }
+
+            $fails[] = $result->extract()->getResult();
         }
 
-        return new Either\Left('No choice matched: '.implode(', ', $fails));
+        return new Either\Left(new ParseResult('No choice matched: '.implode(', ', $fails), false));
     }
 }

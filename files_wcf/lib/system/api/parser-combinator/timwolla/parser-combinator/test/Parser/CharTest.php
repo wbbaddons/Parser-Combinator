@@ -25,17 +25,17 @@ SOFTWARE.
 
 namespace Bastelstube\ParserCombinator\Test\Parser;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Bastelstube\ParserCombinator;
+use function Bastelstube\ParserCombinator\{char, choice, many, satisfyChar, stringP, tryP};
 
-class CharTest extends \PHPUnit_Framework_TestCase
+class CharTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
      */
     public function testRejectsEmpty()
     {
-        new ParserCombinator\Parser\Char('');
+        char('');
     }
 
     /**
@@ -43,16 +43,16 @@ class CharTest extends \PHPUnit_Framework_TestCase
      */
     public function testRejectsLong()
     {
-        new ParserCombinator\Parser\Char('ä.');
+        char('ä.');
     }
 
     public function testParsesChar()
     {
-        $parser = new ParserCombinator\Parser\Char('ä');
+        $parser = char('ä');
         $input = new ParserCombinator\Input('ä');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('ä', $result->getResult());
         });
@@ -60,10 +60,10 @@ class CharTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotParseInvalidChar()
     {
-        $parser = new ParserCombinator\Parser\Char('ä');
+        $parser = char('ä');
         $input = new ParserCombinator\Input('a');
 
-        $parser($input)->either(function ($message) {
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
             $this->assertTrue(true);
         }, function ($result) {
             $this->fail($result->getResult());
@@ -71,7 +71,7 @@ class CharTest extends \PHPUnit_Framework_TestCase
 
         $input = new ParserCombinator\Input('ö');
 
-        $parser($input)->either(function ($message) {
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
             $this->assertTrue(true);
         }, function ($result) {
             $this->fail($result->getResult());

@@ -31,43 +31,53 @@ use Widmogrod\FantasyLand\Functor;
 use Widmogrod\FantasyLand\Monad;
 use Widmogrod\Monad\Either;
 
+/**
+ * Represents a single Parser.
+ */
 abstract class Parser implements
     Functor,
     Applicative,
     Monad
 {
+    /**
+     * Runs this parser on the given Input.
+     *
+     * @param   Input   $input
+     * @return  Either\Either<Result>
+     */
     abstract public function run(Input $input) : Either\Either;
+    
+    public static function parse(Parser $parser, Input $input) : Either\Either
+    {
+        return $parser->run($input)->map(function ($parseResult) {
+            return $parseResult->getResult();
+        });
+    }
 
+    /**
+     * Alias for Parser::run().
+     *
+     * @see Parser::run()
+     */
     public function __invoke(Input $input) : Either\Either
     {
         return $this->run($input);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function map(callable $function)
     {
         return Parser::of($function)->ap($this);
-
-        // Implementation without using ap.
-        return new class($this, $function) extends Parser {
-            private $parent;
-            private $function;
-
-            public function __construct(Parser $parent, callable $function)
-            {
-                $this->parent = $parent;
-                $this->function = $function;
-            }
-
-            public function run(Input $input) : Either\Either
-            {
-                $result = $this->parent->run($input);
-                return $result->map(function (Result $r) : Result {
-                    return $r->map($this->function);
-                });
-            }
-        };
     }
 
+    /**
+     * Returns a Parser that never consumes input and always returns $value.
+     *
+     * @param   mixed   $value
+     * @return  Parser
+     */
     public static function of($value)
     {
         return new class($value) extends Parser {
@@ -79,11 +89,14 @@ abstract class Parser implements
 
             public function run(Input $input) : Either\Either
             {
-                return new Either\Right(new Result($this->value, $input));
+                return new Either\Right(new ParseResult(new Result($this->value, $input), false));
             }
         };
     }
 
+    /**
+     * @inheritDoc
+     */
     public function ap(Apply $b)
     {
         return $this->bind(function ($f) use ($b) {
@@ -91,37 +104,29 @@ abstract class Parser implements
                 return Parser::of($f($x));
             });
         });
-
-        // Implementation without using bind.
-        return new class($this, $b) extends Parser {
-            private $a;
-            private $b;
-
-            public function __construct(Parser $a, Parser $b) {
-                $this->a = $a;
-                $this->b = $b;
-            }
-
-            public function run(Input $input) : Either\Either
-            {
-                return $this->a->run($input)
-                ->bind(function (Result $resultA) : Either\Either {
-                    return $this->b->run($resultA->getRest())
-                    ->bind(function (Result $resultB) use ($resultA) : Either\Either {
-                        return new Either\Right(new Result($resultA->getResult()($resultB->getResult()), $resultB->getRest()));
-                    });
-                });
-            }
-        };
     }
 
-    public function apL(Apply $b)
+    /**
+     * Returns a combined parser that returns the result of the left parser ($this).
+     *
+     * @param   Apply   $b  The right parser.
+     * @return  Parser
+     * @see Parser::ap()
+     */
+    public function apL(Apply $b) : Parser
     {
         return \Widmogrod\Functional\liftA2(function ($a) {
             return $a;
         }, $this, $b);
     }
 
+    /**
+     * Returns a combined parser that returns the result of the right parser ($b).
+     *
+     * @param   Apply   $b  The right parser.
+     * @return  Parser
+     * @see Parser::ap()
+     */
     public function apR(Apply $b)
     {
         return \Widmogrod\Functional\liftA2(function ($_, $b) {
@@ -129,6 +134,12 @@ abstract class Parser implements
         }, $this, $b);
     }
 
+    /**
+     * Runs the left parser ($this), passes the result to $function
+     * and runs the returned parser on the rest of the input.
+     *
+     * @inheritDoc
+     */
     public function bind(callable $function)
     {
         return new class($this, $function) extends Parser {
@@ -144,9 +155,18 @@ abstract class Parser implements
             public function run(Input $input) : Either\Either
             {
                 return $this->parent->run($input)
-                ->bind(function (Result $result) : Either\Either {
+                ->bind(function (ParseResult $result) : Either\Either {
+                    $consumed = $result->hasConsumed();
+                    $result = $result->getResult();
+
                     $function = $this->function;
-                    return $function($result->getResult())->run($result->getRest());
+                    $resultB = $function($result->getResult())->run($result->getRest());
+
+                    return \Widmogrod\Monad\Either\doubleMap(function (ParseResult $left) use ($consumed) {
+                        return new ParseResult($left->getResult(), $left->hasConsumed() || $consumed);
+                    }, function (ParseResult $right) use ($consumed) {
+                        return new ParseResult($right->getResult(), $right->hasConsumed() || $consumed);
+                    }, $resultB);
                 });
             }
 

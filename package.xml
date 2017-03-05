@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>Parser Combinator</packagename>
 		<isapplication>0</isapplication>
-		<version>0.0.1</version>
-		<date>2017-02-27</date>
+		<version>0.0.3</version>
+		<date>2017-03-05</date>
 	</packageinformation>
 	
 	<authorinformation>
@@ -21,6 +21,10 @@
 	</excludedpackages>
 	
 	<instructions type="install">
+		<instruction type="file" application="wcf">files_wcf.tar</instruction>
+	</instructions>
+
+	<instructions type="update" fromversion="0.0.2">
 		<instruction type="file" application="wcf">files_wcf.tar</instruction>
 	</instructions>
 </package>

@@ -50,32 +50,35 @@
     },
     {
         "name": "timwolla/parser-combinator",
-        "version": "v0.0.1",
-        "version_normalized": "0.0.1.0",
+        "version": "v0.0.3",
+        "version_normalized": "0.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/TimWolla/php-Parser-Combinator.git",
-            "reference": "ddf3d23c4b93ab6385fbcec92d802fcc16e03961"
+            "reference": "b83a0b8447afa3cb8122aaea5a68ae8b3135a066"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/TimWolla/php-Parser-Combinator/zipball/ddf3d23c4b93ab6385fbcec92d802fcc16e03961",
-            "reference": "ddf3d23c4b93ab6385fbcec92d802fcc16e03961",
+            "url": "https://api.github.com/repos/TimWolla/php-Parser-Combinator/zipball/b83a0b8447afa3cb8122aaea5a68ae8b3135a066",
+            "reference": "b83a0b8447afa3cb8122aaea5a68ae8b3135a066",
             "shasum": ""
         },
         "require": {
             "widmogrod/php-functional": "^3.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "^4.7"
+            "phpunit/phpunit": "^6.0"
         },
-        "time": "2017-02-27 18:34:26",
+        "time": "2017-03-05 00:07:08",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "Bastelstube\\ParserCombinator\\": "src/"
-            }
+            },
+            "files": [
+                "src/functions.php"
+            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [

@@ -26,10 +26,14 @@ SOFTWARE.
 namespace Bastelstube\ParserCombinator\Parser;
 
 use Bastelstube\ParserCombinator\Input;
+use Bastelstube\ParserCombinator\ParseResult;
 use Bastelstube\ParserCombinator\Parser;
 use Bastelstube\ParserCombinator\Result;
 use Widmogrod\Monad\Either;
 
+/**
+ * Matches the given byte.
+ */
 class Byte extends Parser
 {
     protected $byte;
@@ -39,18 +43,16 @@ class Byte extends Parser
         if (strlen($byte) !== 1) throw new \InvalidArgumentException('You must specify a single byte to match.');
         $this->byte = $byte;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
         return AnyByte::get()->bind(function ($byte) {
-            if ($this->byte !== $byte) return Failure::get();
+            if ($this->byte !== $byte) return new Failure('Unexpected '.$byte.', expecting '.$this->byte.'.');
 
             return Parser::of($byte);
         })->run($input);
-    }
-
-    public function __toString()
-    {
-        return 'Byte('.$this->byte.')';
     }
 }

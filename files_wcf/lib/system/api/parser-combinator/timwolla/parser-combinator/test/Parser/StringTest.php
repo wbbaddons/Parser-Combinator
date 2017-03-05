@@ -25,18 +25,18 @@ SOFTWARE.
 
 namespace Bastelstube\ParserCombinator\Test\Parser;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Bastelstube\ParserCombinator;
+use function Bastelstube\ParserCombinator\{char, choice, many, satisfyChar, stringP, tryP};
 
-class StringPTest extends \PHPUnit_Framework_TestCase
+class StringPTest extends \PHPUnit\Framework\TestCase
 {
     public function testParsesString()
     {
-        $parser = new ParserCombinator\Parser\StringP('abc');
+        $parser = stringP('abc');
         $input = new ParserCombinator\Input('abc');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('abc', $result->getResult());
         });
@@ -44,11 +44,11 @@ class StringPTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotParseInvalidString()
     {
-        $parser = new ParserCombinator\Parser\StringP('abc');
+        $parser = stringP('abc');
 
         $input = new ParserCombinator\Input('ab');
 
-        $parser($input)->either(function ($message) {
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
             $this->assertTrue(true);
         }, function ($result) {
             $this->fail($result->getResult());
@@ -56,7 +56,7 @@ class StringPTest extends \PHPUnit_Framework_TestCase
 
         $input = new ParserCombinator\Input('abd');
 
-        $parser($input)->either(function ($message) {
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
             $this->assertTrue(true);
         }, function ($result) {
             $this->fail($result->getResult());

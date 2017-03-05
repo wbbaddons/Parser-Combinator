@@ -25,18 +25,17 @@ SOFTWARE.
 
 namespace Bastelstube\ParserCombinator\Test;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Bastelstube\ParserCombinator;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit\Framework\TestCase
 {
     public function testMap()
     {
-        $parser = ParserCombinator\Parser::of('a');
+        $parser = ParserCombinator\Parser::of('a')->map('strtoupper');
         $input = new ParserCombinator\Input('x');
 
-        $parser->map('strtoupper')($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('A', $result->getResult());
         });
@@ -47,11 +46,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser = ParserCombinator\Parser::of('a');
         $input = new ParserCombinator\Input('x');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('a', $result->getResult());
-            $this->assertSame('x', $result->getRest()->getString());
+            $this->assertSame('x', $result->getRest()->bytes());
         });
     }
 
@@ -66,11 +65,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         }))->ap($b);
         $input = new ParserCombinator\Input('x');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('a,b', $result->getResult());
-            $this->assertSame('x', $result->getRest()->getString());
+            $this->assertSame('x', $result->getRest()->bytes());
         });
     }
 
@@ -81,11 +80,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser = $a->apL($b);
         $input = new ParserCombinator\Input('ab');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('a', $result->getResult());
-            $this->assertSame('', $result->getRest()->getString());
+            $this->assertSame('', $result->getRest()->bytes());
         });
     }
 
@@ -96,11 +95,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser = $a->apR($b);
         $input = new ParserCombinator\Input('ab');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('b', $result->getResult());
-            $this->assertSame('', $result->getRest()->getString());
+            $this->assertSame('', $result->getRest()->bytes());
         });
     }
 
@@ -112,11 +111,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         });
         $input = new ParserCombinator\Input('x');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('b', $result->getResult());
-            $this->assertSame('x', $result->getRest()->getString());
+            $this->assertSame('x', $result->getRest()->bytes());
         });
     }
 }

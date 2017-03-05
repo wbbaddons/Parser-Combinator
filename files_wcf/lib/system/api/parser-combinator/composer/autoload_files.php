@@ -15,4 +15,5 @@ return array(
     '09eaa491d0fd74f6a1379a1deb95e72b' => $vendorDir . '/widmogrod/php-functional/src/Monad/IO/errors.php',
     '1ad0c1c1d771481281a7dc68e7438606' => $vendorDir . '/widmogrod/php-functional/src/Monad/State/functions.php',
     '14befb123c1130ec9db69bcc4e1c46f4' => $vendorDir . '/widmogrod/php-functional/src/Monad/Control/functions.php',
+    'f13154c029e8a93ff20ca4c513fc99ff' => $vendorDir . '/timwolla/parser-combinator/src/functions.php',
 );

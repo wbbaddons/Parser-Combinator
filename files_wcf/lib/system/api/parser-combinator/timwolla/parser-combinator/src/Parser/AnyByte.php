@@ -26,20 +26,26 @@ SOFTWARE.
 namespace Bastelstube\ParserCombinator\Parser;
 
 use Bastelstube\ParserCombinator\Input;
+use Bastelstube\ParserCombinator\ParseResult;
 use Bastelstube\ParserCombinator\Parser;
 use Bastelstube\ParserCombinator\Result;
 use Bastelstube\ParserCombinator\Singleton;
 use Widmogrod\Monad\Either;
 
+/**
+ * Returns the next byte in the Input.
+ */
 class AnyByte extends Parser
 {
     use Singleton;
 
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
-        $input = $input->getString();
-        if (strlen($input) < 1) return new Either\Left('End of input reached while trying to parse any byte.');
-    
-        return new Either\Right(new Result($input{0}, new Input(substr($input, 1))));
+        if ($input->length() < 1) return new Either\Left(new ParseResult('End of input reached while trying to parse a byte.', false));
+
+        return new Either\Right(new ParseResult(new Result($input->bytes(1), $input->advanceBytes(1)), true));
     }
 }

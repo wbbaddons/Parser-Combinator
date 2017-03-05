@@ -4,34 +4,37 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a344f00e2db92696e53bfec4246add80",
-    "content-hash": "c339382227049a2f5aa104871e6bd865",
+    "hash": "9d5f20c13d545c441c57fa47d3597701",
+    "content-hash": "a06f48e479cc08867781369a6e5b47bf",
     "packages": [
         {
             "name": "timwolla/parser-combinator",
-            "version": "v0.0.1",
+            "version": "v0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TimWolla/php-Parser-Combinator.git",
-                "reference": "ddf3d23c4b93ab6385fbcec92d802fcc16e03961"
+                "reference": "b83a0b8447afa3cb8122aaea5a68ae8b3135a066"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TimWolla/php-Parser-Combinator/zipball/ddf3d23c4b93ab6385fbcec92d802fcc16e03961",
-                "reference": "ddf3d23c4b93ab6385fbcec92d802fcc16e03961",
+                "url": "https://api.github.com/repos/TimWolla/php-Parser-Combinator/zipball/b83a0b8447afa3cb8122aaea5a68ae8b3135a066",
+                "reference": "b83a0b8447afa3cb8122aaea5a68ae8b3135a066",
                 "shasum": ""
             },
             "require": {
                 "widmogrod/php-functional": "^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.7"
+                "phpunit/phpunit": "^6.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Bastelstube\\ParserCombinator\\": "src/"
-                }
+                },
+                "files": [
+                    "src/functions.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -43,7 +46,7 @@
                     "email": "tim@bastelstu.be"
                 }
             ],
-            "time": "2017-02-27 18:34:26"
+            "time": "2017-03-05 00:07:08"
         },
         {
             "name": "widmogrod/php-functional",

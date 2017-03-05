@@ -26,20 +26,26 @@ SOFTWARE.
 namespace Bastelstube\ParserCombinator\Parser;
 
 use Bastelstube\ParserCombinator\Input;
+use Bastelstube\ParserCombinator\ParseResult;
 use Bastelstube\ParserCombinator\Parser;
 use Bastelstube\ParserCombinator\Result;
 use Bastelstube\ParserCombinator\Singleton;
 use Widmogrod\Monad\Either;
 
+/**
+ * Returns the next unicode character in the Input.
+ */
 class AnyChar extends Parser
 {
     use Singleton;
 
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
-        $input = $input->getString();
-        if (mb_strlen($input) < 1) return new Either\Left('End of input reached while trying to parse any char.');
+        if ($input->length() < 1) return new Either\Left(new ParseResult('End of input reached while trying to parse a char.', false));
 
-        return new Either\Right(new Result(mb_substr($input, 0, 1), new Input(mb_substr($input, 1))));
+        return new Either\Right(new ParseResult(new Result($input->chars(1), $input->advanceChars(1)), true));
     }
 }

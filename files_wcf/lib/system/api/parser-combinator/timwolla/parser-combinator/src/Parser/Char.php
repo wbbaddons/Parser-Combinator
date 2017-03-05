@@ -26,10 +26,14 @@ SOFTWARE.
 namespace Bastelstube\ParserCombinator\Parser;
 
 use Bastelstube\ParserCombinator\Input;
+use Bastelstube\ParserCombinator\ParseResult;
 use Bastelstube\ParserCombinator\Parser;
 use Bastelstube\ParserCombinator\Result;
 use Widmogrod\Monad\Either;
 
+/**
+ * Matches the given unicode character.
+ */
 class Char extends Parser
 {
     protected $char;
@@ -39,18 +43,14 @@ class Char extends Parser
         if (mb_strlen($char) !== 1) throw new \InvalidArgumentException('You must specify a single byte to match.');
         $this->char = $char;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
         return AnyChar::get()->bind(function ($char) {
-            if ($this->char !== $char) return new class($this->char, $char) extends Parser {
-                public function __construct($expected, $got) {
-                    $this->expected = $expected; $this->got = $got;
-                }
-                public function run(Input $input) : Either\Either {
-                    return new Either\Left('Expected '.$this->expected.', got '.$this->got);
-                }
-            };
+            if ($this->char !== $char) return new Failure('Unexpected '.$char.', expecting '.$this->char.'.');
 
             return Parser::of($char);
         })->run($input);

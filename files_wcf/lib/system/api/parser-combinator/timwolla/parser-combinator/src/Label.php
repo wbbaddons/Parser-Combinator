@@ -23,41 +23,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-namespace Bastelstube\ParserCombinator\Parser;
+namespace Bastelstube\ParserCombinator;
 
-use Bastelstube\ParserCombinator\Input;
-use Bastelstube\ParserCombinator\ParseResult;
-use Bastelstube\ParserCombinator\Parser;
-use Bastelstube\ParserCombinator\Result;
 use Widmogrod\Monad\Either;
 
-/**
- * Matches the given string.
- */
-class StringP extends Parser
+class Label extends Parser
 {
-    protected $string;
+    /**
+     * Inner parser.
+     * @var Parser
+     */
+    protected $parser;
 
-    public function __construct(string $string)
+    protected $label;
+
+    public function __construct(Parser $parser, string $label)
     {
-        $this->string = $string;
+        $this->parser = $parser;
+        $this->label = $label;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
-        if ($input->length() < ($length = strlen($this->string))) return new Either\Left(new ParseResult('End of input reached while trying to parse '.$this.'.', false));
-        $got = $input->bytes($length);
-        for ($i = 0; $i < $length; $i++) {
-            if ($got{$i} !== $this->string{$i}) {
-                return new Either\Left(new ParseResult('Unexpected '.$got{$i}.', expecting '.$this->string{$i}.' of '.$this->string.'.', $i > 0));
-            }
-        }
-
-        return new Either\Right(new ParseResult(new Result($got, $input->advanceBytes($length)), $length > 0));
-    }
-
-    public function __toString()
-    {
-        return 'String('.$this->string.')';
+        return \Widmogrod\Monad\Either\doubleMap(function (ParseResult $left) {
+            return new ParseResult($this->label, $left->hasConsumed());
+        }, \Widmogrod\Functional\identity, $this->parser->run($input));
     }
 }

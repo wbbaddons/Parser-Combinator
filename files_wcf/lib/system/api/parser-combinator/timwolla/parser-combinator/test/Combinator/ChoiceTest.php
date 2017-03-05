@@ -25,23 +25,23 @@ SOFTWARE.
 
 namespace Bastelstube\ParserCombinator\Test\Combinator;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Bastelstube\ParserCombinator;
+use function Bastelstube\ParserCombinator\{char, choice, many, satisfyChar, stringP, tryP};
 
-class ChoiceTest extends \PHPUnit_Framework_TestCase
+class ChoiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testFirstChoice()
     {
         $a = new ParserCombinator\Parser\Byte('a');
         $b = new ParserCombinator\Parser\Byte('b');
-        $parser = new ParserCombinator\Combinator\Choice($a, $b);
+        $parser = choice(tryP($a), $b);
         $input = new ParserCombinator\Input('a');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('a', $result->getResult());
-            $this->assertSame('', $result->getRest()->getString());
+            $this->assertSame('', $result->getRest()->bytes());
         });
     }
 
@@ -49,14 +49,14 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     {
         $a = new ParserCombinator\Parser\Byte('a');
         $b = new ParserCombinator\Parser\Byte('b');
-        $parser = new ParserCombinator\Combinator\Choice($a, $b);
+        $parser = choice(tryP($a), $b);
         $input = new ParserCombinator\Input('b');
 
-        $parser($input)->either(function ($message) {
-            $this->fail($message);
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
+            $this->fail((string) $message);
         }, function ($result) {
             $this->assertSame('b', $result->getResult());
-            $this->assertSame('', $result->getRest()->getString());
+            $this->assertSame('', $result->getRest()->bytes());
         });
     }
 
@@ -64,10 +64,10 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     {
         $a = new ParserCombinator\Parser\Byte('a');
         $b = new ParserCombinator\Parser\Byte('b');
-        $parser = new ParserCombinator\Combinator\Choice($a, $b);
+        $parser = choice(tryP($a), $b);
         $input = new ParserCombinator\Input('c');
 
-        $parser($input)->either(function ($message) {
+        ParserCombinator\Parser::parse($parser, $input)->either(function ($message) {
             $this->assertTrue(true);
         }, function ($result) {
             $this->fail($result->getResult());

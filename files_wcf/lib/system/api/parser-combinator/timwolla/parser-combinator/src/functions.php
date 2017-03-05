@@ -25,29 +25,56 @@ SOFTWARE.
 
 namespace Bastelstube\ParserCombinator;
 
-use Widmogrod\Monad\Either;
+const choice = 'Bastelstube\ParserCombinator\choice';
 
-/**
- * Takes a Parser by reference to allow for recursive parsing.
- */
-class RefParser extends Parser
-{
-    /**
-     * Inner parser.
-     * @var Parser
-     */
-    protected $parser;
+function choice(...$args) {
+	return new Combinator\Choice(...$args);
+}
 
-    public function __construct(Parser &$parser)
-    {
-        $this->parser = &$parser;
-    }
+const many = 'Bastelstube\ParserCombinator\many';
 
-    /**
-     * @inheritDoc
-     */
-    public function run(Input $input) : Either\Either
-    {
-        return $this->parser->run($input);
-    }
+function many(...$args) {
+	return new Combinator\Many(...$args);
+}
+
+const tryP = 'Bastelstube\ParserCombinator\tryP';
+
+function tryP(...$args) {
+	return new TryP(...$args);
+}
+
+const label = 'Bastelstube\ParserCombinator\label';
+
+function label(...$args) {
+	return new Label(...$args);
+}
+
+const stringP = 'Bastelstube\ParserCombinator\stringP';
+
+function stringP(...$args) {
+	return new Parser\StringP(...$args);
+}
+
+const byte = 'Bastelstube\ParserCombinator\byte';
+
+function byte(...$args) {
+	return new Parser\Byte(...$args);
+}
+
+const char = 'Bastelstube\ParserCombinator\char';
+
+function char(...$args) {
+	return new Parser\Char(...$args);
+}
+
+const satisfyByte = 'Bastelstube\ParserCombinator\satisfyByte';
+
+function satisfyByte(...$args) {
+	return new Parser\SatisfyByte(...$args);
+}
+
+const satisfyChar = 'Bastelstube\ParserCombinator\satisfyChar';
+
+function satisfyChar(...$args) {
+	return new Parser\SatisfyChar(...$args);
 }

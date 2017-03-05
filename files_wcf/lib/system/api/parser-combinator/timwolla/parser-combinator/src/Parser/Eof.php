@@ -26,20 +26,26 @@ SOFTWARE.
 namespace Bastelstube\ParserCombinator\Parser;
 
 use Bastelstube\ParserCombinator\Input;
+use Bastelstube\ParserCombinator\ParseResult;
 use Bastelstube\ParserCombinator\Parser;
 use Bastelstube\ParserCombinator\Result;
 use Bastelstube\ParserCombinator\Singleton;
 use Widmogrod\Monad\Either;
 
+/**
+ * Matches the end of the input.
+ */
 class Eof extends Parser
 {
     use Singleton;
 
+    /**
+     * @inheritDoc
+     */
     public function run(Input $input) : Either\Either
     {
-        $input = $input->getString();
-        if (strlen($input) > 0) return new Either\Left('End of input not yet reached, while trying to match EOF.');
+        if ($input->length() > 0) return new Either\Left(new ParseResult('End of input not yet reached, while trying to match EOF.', false));
 
-        return new Either\Right(new Result('', new Input('')));
+        return new Either\Right(new ParseResult(new Result('', $input), false));
     }
 }
