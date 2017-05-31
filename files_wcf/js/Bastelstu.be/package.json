@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "parser-combinator": "^0.4.1"
+  }
+}

@@ -1,9 +1,0 @@
-{
-    "config": {
-        "vendor-dir": ".",
-        "prepend-autoloader": false
-    },
-    "require": {
-        "timwolla/parser-combinator": "0.0.3"
-    }
-}

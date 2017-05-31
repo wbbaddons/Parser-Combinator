@@ -3,12 +3,12 @@
 	<packageinformation>
 		<packagename>Parser Combinator</packagename>
 		<isapplication>0</isapplication>
-		<version>0.0.3</version>
-		<date>2017-03-05</date>
+		<version>0.4.1</version>
+		<date>2017-05-31</date>
 	</packageinformation>
 	
 	<authorinformation>
-		<author>Tim Düsterhus</author>
+		<author>Didier Plaindoux, Tim Düsterhus</author>
 		<authorurl>http://tims.bastelstu.be</authorurl>
 	</authorinformation>
 	
