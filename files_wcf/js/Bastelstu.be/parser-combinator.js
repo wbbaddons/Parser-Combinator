@@ -1,1 +1,1 @@
-node_modules/parser-combinator/dist/parser-combinator.min.js
+node_modules/@masala/parser/dist/masala-parser.min.js

@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "parser-combinator": "^0.4.1"
+    "@masala/parser": "0.6.1"
   }
 }
