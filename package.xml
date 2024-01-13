@@ -3,7 +3,13 @@
 	<packageinformation>
 		<packagename>Parser Combinator</packagename>
 		<isapplication>0</isapplication>
-		<version>0.6.1 pl 1</version>
+		<!--
+		first digit : versioning epoch used to fix historical versioning mistakes
+		second digit: encoded upstream version, two digits each
+		last digit  : respin for packaging changes
+		-->
+		<!-- 0.6.1 -->
+		<version>1.601.0</version> <!-- actually: 1.000601.0 -->
 		<date>2022-09-16</date>
 	</packageinformation>
 	
@@ -25,6 +31,10 @@
 	</instructions>
 
 	<instructions type="update" fromversion="0.6.1">
+		<instruction type="file" application="wcf">files_wcf.tar</instruction>
+	</instructions>
+
+	<instructions type="update" fromversion="0.6.1 pl 1">
 		<instruction type="file" application="wcf">files_wcf.tar</instruction>
 	</instructions>
 </package>
